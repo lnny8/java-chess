@@ -19,7 +19,7 @@ public class main {
 
     public static char turn = 'w';
 
-    // public static String[] board = {
+    // public static String[] stringboard = {
     //     "b-r", "b-n", "b-b", "b-q", "b-k", "b-b", "b-n", "b-r",
     //     "b-p", "b-p", "b-p", "b-p", "b-p", "b-p", "b-p", "b-p",
     //     "", "", "", "", "", "", "", "",
@@ -30,17 +30,27 @@ public class main {
     //     "w-r", "w-n", "w-b", "w-q", "w-k", "w-b", "w-n", "w-r"
     // };
 
-    public static String[] board = {
-        "b-r", "b-n", "b-b", "b-q", "b-k", "b-b", "b-n", "b-r",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "w-n", "", "", "",
-        "", "b-r", "", "", "", "", "b-n", "",
-        "", "", "", "", "", "", "", "",
-        "", "", "", "", "", "", "", "",
-        "w-r", "w-n", "", "w-q", "w-k", "w-b", "w-n", "w-r"
+    // public static String[][] falseboard = {
+    //     {"b-r", "b-n", "b-b", "b-q", "b-k", "b-b", "b-n", "b-r"},
+    //     {"b-p", "b-p", "b-p", "b-p", "b-p", "b-p", "b-p", "b-p"},
+    //     {"", "", "", "", "", "", "", ""},
+    //     {"", "", "", "", "", "", "", ""},
+    //     {"", "", "", "", "", "", "", ""},
+    //     {"", "", "", "", "", "", "", ""},
+    //     {"w-p", "w-p", "w-p", "w-p", "w-p", "w-p", "w-p", "w-p"},
+    //     {"w-r", "w-n", "w-b", "w-q", "w-k", "w-b", "w-n", "w-r"}
+    // };
+    
+    public static String[][] board = {
+        {"b-r", "b-p", "", "", "", "", "w-p", "w-r"},
+        {"b-n", "b-p", "", "", "", "", "w-p", "w-n"},
+        {"b-b", "b-p", "", "", "", "", "w-p", "w-b"},
+        {"b-q", "b-p", "", "", "", "", "w-p", "w-q"},
+        {"b-k", "b-p", "", "", "", "", "w-p", "w-k"},
+        {"b-b", "b-p", "", "", "", "", "w-p", "w-b"},
+        {"b-n", "b-p", "", "", "", "", "w-p", "w-n"},
+        {"b-r", "b-p", "", "", "", "", "w-p", "w-r"}
     };
-
 
     public static void main(String[] args) {
         window();
@@ -70,8 +80,8 @@ public class main {
                 
                 //move
                 if(coordinateInMoves(x, y)) {
-                    board[x + y * 8] = board[selectedFieldX + selectedFieldY * 8];
-                    board[selectedFieldX + selectedFieldY * 8] = "";
+                    board[x][y] = board[selectedFieldX][selectedFieldY];
+                    board[selectedFieldX][selectedFieldY] = "";
                     selectedFieldX = null;
                     selectedFieldY = null;
                     turn = turn == 'w' ? 'b' : 'w';
@@ -80,7 +90,7 @@ public class main {
                     checkForPawnPromotion();                    
                 }
                 //select Figure
-                else if(board[x + y * 8] != "" && (board[x + y * 8].charAt(0) == turn)) {
+                 else if(board[x][y] != "" && (board[x][y].charAt(0) == turn)) {
                     selectedFieldX = x;
                     selectedFieldY = y;
                     getMoves();
@@ -98,8 +108,8 @@ public class main {
 
     public static void checkForPawnPromotion() {
         for (int x = 0; x < 8; x++) {
-            if(board[x + 0 * 8] == "w-p") board[x + 0 * 8] = "w-q";
-            if(board[x + 7 * 8] == "b-p") board[x + 7 * 8] = "b-q";
+            if(board[x][0] == "w-p") board[x][0] = "w-q";
+            if(board[x][7] == "b-p") board[x][7] = "b-q";
         }
     }
 
@@ -111,7 +121,7 @@ public class main {
                     g.setColor(new Color(0xE8EDF9));
                 } else g.setColor(new Color(0xB7C0D8));
 
-                if(selectedFieldX != null && selectedFieldX == x && selectedFieldY == y) g.setColor(new Color(0, 200, 0));
+                if(selectedFieldX != null && selectedFieldX == x && selectedFieldY == y) g.setColor(new Color(0xb1a7fc));
                 g.fillRect(x * 50, y * 50, 50, 50);
             }
         }
@@ -119,8 +129,8 @@ public class main {
 	//draw coordinates
 	String[] coordinateLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
 	int[] coordinateNumbers = {8,7,6,5,4,3,2,1};
-	for(int x = 0; x<8; x++) {
-            for (int y = 0; y < 8; y++) {
+    for (int y = 0; y < 8; y++) {
+                for(int x = 0; x<8; x++) {
 		if((x+y*7) % 2 == 0) {
 		g.setColor(new Color(0xB7C0D8));
 		} else g.setColor(new Color(0xE8EDF9));
@@ -132,9 +142,9 @@ public class main {
         // draw figures
         for(int x = 0; x<8; x++) {
             for (int y = 0; y < 8; y++) {
-                if(board[x + y * 8] == "") continue;
-                BufferedImage img = getImage(board[x + y * 8]);
-                //g.drawImage(img, x * 50, y * 50, 50, 50, null);
+                if(board[x][y] == "") continue;
+                BufferedImage img = getImage(board[x][y]);
+                g.drawImage(img, x * 50, y * 50, 50, 50, null);
             }
         }
 
@@ -142,7 +152,7 @@ public class main {
         for(int x = 0; x<8; x++) {
             for (int y = 0; y < 8; y++) {
                 if(coordinateInMoves(x, y)) {
-                    g.setColor(new Color(0, 200, 0));
+                    g.setColor(new Color(0xb1a7fc));
                     g.fillOval(x * 50 + 15, y * 50 + 15, 20, 20);
                 }
             }
@@ -202,16 +212,16 @@ public class main {
         int y = selectedFieldY;
         int[][] knightMoves = { //up right, up left, down right, down left
 	    {2, -1}, {1, -2}, {-2, -1}, {-1, -2}, {2, 1}, {1, 2}, {-2, 1}, {-1, 2}
-	};
+	    };
 
 
-	for (int i = 0; i<knightMoves.length; i++) {
-	
-	if(x+knightMoves[i][0]>7 || x+knightMoves[i][0]<0 || y+knightMoves[i][1]>7 || y+knightMoves[i][1]<0) continue;
-	
-	//add move if place is empty or opponent
-	if(getFigure(x + knightMoves[i][0], y + knightMoves[i][1]) == "" || getFigure(x+knightMoves[i][0], y+knightMoves[i][1]).charAt(0) == (turn == 'w' ? 'b' : 'w')) 	addMove(x+knightMoves[i][0], y+knightMoves[i][1]); 	
-	}
+        for (int i = 0; i<knightMoves.length; i++) {
+            // can look in getFigure() without crash?
+            if(x+knightMoves[i][0]>7 || x+knightMoves[i][0]<0 || y+knightMoves[i][1]>7 || y+knightMoves[i][1]<0) continue;
+        
+            // add move if place is empty or opponent
+            if(getFigure(x + knightMoves[i][0], y + knightMoves[i][1]) == "" || getFigure(x+knightMoves[i][0], y+knightMoves[i][1]).charAt(0) == (turn == 'w' ? 'b' : 'w')) 	addMove(x+knightMoves[i][0], y+knightMoves[i][1]); 	
+        }
 
     }
 
@@ -266,9 +276,10 @@ public class main {
     }
 
     public static void addStraightMoves() {
+        // int[][] directions = {{1, 0}, {-1, 0}, {0, -1}, {0, 1}}; // direction, one step in the direction
         right: for(int a = 1; a<8; a++) {
             if(selectedFieldX + a > 7) break right;
-            String positionToMove = board[selectedFieldX + a + (selectedFieldY * 8)];
+            String positionToMove = board[selectedFieldX + a][selectedFieldY];
             //destroy loop before adding field so it ends before own figure
             if(positionToMove != "" && positionToMove.charAt(0) == turn) break right;
             addMove(selectedFieldX + a, selectedFieldY);
@@ -277,38 +288,74 @@ public class main {
         }
         left: for(int a = 1; a<8; a++) {
             if(selectedFieldX - a < 0) break left;
-            String positionToMove = board[selectedFieldX - a + (selectedFieldY * 8)];
+            String positionToMove = board[selectedFieldX - a][selectedFieldY];
+            //destroy loop before adding field so it ends before own figure
             if(positionToMove != "" && positionToMove.charAt(0) == turn) break left;
             addMove(selectedFieldX - a, selectedFieldY);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
             if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break left;
         }
         up: for(int a = 1; a<8; a++) {
             if(selectedFieldY - a < 0) break up;
-            String positionToMove = board[selectedFieldX + (selectedFieldY * 8) - a];
+            String positionToMove = board[selectedFieldX][selectedFieldY - a];
+            //destroy loop before adding field so it ends before own figure
             if(positionToMove != "" && positionToMove.charAt(0) == turn) break up;
             addMove(selectedFieldX, selectedFieldY - a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
             if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break up;
         }
         down: for(int a = 1; a<8; a++) {
             if(selectedFieldY + a > 7) break down;
-            String positionToMove = board[selectedFieldX + (selectedFieldY * 8) + a];
+            String positionToMove = board[selectedFieldX][selectedFieldY + a];
+            //destroy loop before adding field so it ends before own figure
             if(positionToMove != "" && positionToMove.charAt(0) == turn) break down;
             addMove(selectedFieldX, selectedFieldY + a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
             if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break down;
         }
     }
-
     public static void addDiagonalMoves() {
-        for (int a = 0; a<8; a++) {
-            addMove(selectedFieldX + a, selectedFieldY + a);
-            addMove(selectedFieldX - a, selectedFieldY - a);
+        rightup: for(int a = 1; a<8; a++) {
+            if(selectedFieldX + a > 7 && selectedFieldY - a < 0) break rightup;
+            String positionToMove = board[selectedFieldX + a][selectedFieldY - a];
+            //destroy loop before adding field so it ends before own figure
+            if(positionToMove != "" && positionToMove.charAt(0) == turn) break rightup;
             addMove(selectedFieldX + a, selectedFieldY - a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy 
+            if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break rightup;
+        }
+        leftup: for(int a = 1; a<8; a++) {
+            if(selectedFieldX - a < 0 || selectedFieldY - a < 0) break leftup;
+            String positionToMove = board[selectedFieldX - a][selectedFieldY - a];
+            //destroy loop before adding field so it ends before own figure
+            if(positionToMove != "" && positionToMove.charAt(0) == turn) break leftup;
+            addMove(selectedFieldX - a, selectedFieldY - a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
+            if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break leftup;
+        }
+        rightdown: for(int a = 1; a<8; a++) {
+            if(selectedFieldX + a > 7 || selectedFieldY + a > 7) break rightdown;
+            String positionToMove = board[selectedFieldX + a][selectedFieldY + a];
+            //destroy loop before adding field so it ends before own figure
+            if(positionToMove != "" && positionToMove.charAt(0) == turn) break rightdown;
+            addMove(selectedFieldX + a, selectedFieldY + a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
+            if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break rightdown;
+        }
+        leftdown: for(int a = 1; a<8; a++) {
+            if(selectedFieldX - a < 0 || selectedFieldY + a > 7) break leftdown;
+            String positionToMove = board[selectedFieldX - a][selectedFieldY + a];
+            //destroy loop before adding field so it ends before own figure
+            if(positionToMove != "" && positionToMove.charAt(0) == turn) break leftdown;
             addMove(selectedFieldX - a, selectedFieldY + a);
+            //destroy loop after adding field so you cant hit figures that stand behind figures of the enemy
+            if(positionToMove != "" && positionToMove.charAt(0) == (turn == 'w' ? 'b' : 'w')) break leftdown;
         }
     }
 
+
     public static String getFigure(int x, int y) {
-        return board[x + y * 8];
+        return board[x][y];
     }
 
     public static BufferedImage getImage(String name) {
