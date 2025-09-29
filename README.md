@@ -1,2 +1,2 @@
-##chess in java
-#by lnny8
+## chess in java
+# by lnny8
