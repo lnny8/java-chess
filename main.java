@@ -187,23 +187,19 @@ public class main {
     public static void addKnightLogic() {
         int x = selectedFieldX;
         int y = selectedFieldY;
-        
+        int[][] knightMoves = { //up right, up left, down right, down left
+	    {2, -1}, {1, -2}, {-2, -1}, {-1, -2}, {2, 1}, {1, 2}, {-2, 1}, {-1, 2}
+	};
 
-                // up right
-                if(getFigure(x+2, y-1) == "" || getFigure(x+2, y-1).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x+2, y-1);
-                if(getFigure(x+1, y-2) == "" || getFigure(x+1, y-2).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x+1, y-2);
-                
-                // up left
-                if(getFigure(x-2, y-1) == "" || getFigure(x-2, y-1).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x-2, y-1);
-                if(getFigure(x-1, y-2) == "" || getFigure(x-1, y-2).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x-1, y-2);
 
-                //down right
-                if(getFigure(x+2, y+1) == "" || getFigure(x+2, y+1).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x+2, y+1);
-                if(getFigure(x+1, y+2) == "" || getFigure(x+1, y+2).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x+1, y+2);
-                
-                //down left
-                if(getFigure(x-2, y+1) == "" || getFigure(x-2, y+1).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x-2, y+1);
-                if(getFigure(x-1, y+2) == "" || getFigure(x-1, y+2).charAt(0) == (turn == 'w' ? 'b' : 'w')) addMove(x-1, y+2);
+	for (int i = 0; i<knightMoves.length; i++) {
+	
+	if(x+knightMoves[i][0]>7 || x+knightMoves[i][0]<0 || y+knightMoves[i][1]>7 || y+knightMoves[i][1]<0) continue;
+	
+	//add move if place is empty or opponent
+	if(getFigure(x + knightMoves[i][0], y + knightMoves[i][1]) == "" || getFigure(x+knightMoves[i][0], y+knightMoves[i][1]).charAt(0) == (turn == 'w' ? 'b' : 'w')) 	addMove(x+knightMoves[i][0], y+knightMoves[i][1]); 	
+	}
+
     }
 
     public static void addMove(int x, int y) {
