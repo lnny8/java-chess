@@ -108,11 +108,24 @@ public class main {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 if((x + 7 * y) % 2 == 0) {
-                    g.setColor(new Color(0xffffff));
-                } else g.setColor(new Color(0x666666));
+                    g.setColor(new Color(0xE8EDF9));
+                } else g.setColor(new Color(0xB7C0D8));
 
                 if(selectedFieldX != null && selectedFieldX == x && selectedFieldY == y) g.setColor(new Color(0, 200, 0));
                 g.fillRect(x * 50, y * 50, 50, 50);
+            }
+        }
+
+	//draw coordinates
+	String[] coordinateLetters = {"A", "B", "C", "D", "E", "F", "G", "H"};
+	int[] coordinateNumbers = {8,7,6,5,4,3,2,1};
+	for(int x = 0; x<8; x++) {
+            for (int y = 0; y < 8; y++) {
+		if((x+y*7) % 2 == 0) {
+		g.setColor(new Color(0xB7C0D8));
+		} else g.setColor(new Color(0xE8EDF9));
+		if(y == 7) g.drawString(coordinateLetters[x], x*50 + 40, y*50 + 45);
+		if(x == 0) g.drawString(coordinateNumbers[y] + "", x*50, y*50 + 10);
             }
         }
 
@@ -121,7 +134,7 @@ public class main {
             for (int y = 0; y < 8; y++) {
                 if(board[x + y * 8] == "") continue;
                 BufferedImage img = getImage(board[x + y * 8]);
-                g.drawImage(img, x * 50, y * 50, 50, 50, null);
+                //g.drawImage(img, x * 50, y * 50, 50, 50, null);
             }
         }
 
